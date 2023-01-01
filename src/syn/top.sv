@@ -4,14 +4,15 @@
 //
 //     Purpose: Default top-level file
 //
-//
 //-------------------------------------------------------------------------------
 
 `include "cfg_params.svh"
 
-`define WIDTH 4
 
 module automatic top
+#(
+    localparam DATA_W = `DATA_WIDTH
+)
 (
 `ifdef DIFF_REFCLK
     input  logic              ref_clk_p,
@@ -20,19 +21,30 @@ module automatic top
     input  logic              ref_clk,
 `endif
 
-    output logic [`WIDTH-1:0] out = 0
+    output logic              clk_out,
+
+    input  logic [DATA_W-1:0] dinp_a,
+    input  logic              valid_a,
+    output logic              ready_a,
+
+    input  logic [DATA_W-1:0] dinp_b,
+    input  logic              valid_b,
+    output logic              ready_b,
+
+    output logic [ DATA_W:0]  out,
+    output logic              valid_out
 );
 
 //------------------------------------------------------------------------------
 //
 //    Settings
 //
-
+    
 //------------------------------------------------------------------------------
 //
 //    Types
 //
-
+    
 //------------------------------------------------------------------------------
 //
 //    Objects
@@ -43,6 +55,12 @@ logic ref_clk;
 
 logic clk;
 logic pll_locked;
+logic rst;
+
+dinp_if #( .DATA_W ( DATA_W   ) ) a();
+dinp_if #( .DATA_W ( DATA_W   ) ) b();
+dout_if #( .DATA_W ( DATA_W+1 ) ) o();
+
 
 //------------------------------------------------------------------------------
 //
@@ -50,7 +68,7 @@ logic pll_locked;
 //
 `ifdef TOP_ENABLE_ILA
 
-(* mark_debug = "true" *) logic [`WIDTH-1:0] dbg_out;
+(* mark_debug = "true" *) logic [DATA_W-1:0] dbg_out;
 (* mark_debug = "true" *) logic              dbg_pll_locked;
 
 assign dbg_out        = out;
@@ -68,11 +86,42 @@ assign dbg_pll_locked = pll_locked;
 //
 //    Logic
 //
+assign rst     = ~pll_locked;
+assign clk_out = clk;
+
+`ifdef COMPLEX_EXAMPLE
+
+assign a.valid   = valid_a;
+assign b.valid   = valid_b;
+                 
+assign ready_a   = a.ready;
+assign ready_b   = b.ready;
+                 
+assign a.data    = dinp_a;
+assign b.data    = dinp_b;
+
+assign out       = o.data;
+assign valid_out = o.valid;
+
+`else
+
+assign ready_a   = 1;
+assign ready_b   = 1;
+assign valid_out = 1;
+
 always_ff @(posedge clk) begin
-    if(pll_locked) begin
-        out <= out + 1;
+    if(rst) begin
+        out <= 0;
+    end
+    else begin
+        if(valid_a && valid_b) begin
+            out <= dinp_a + dinp_b;
+        end
     end
 end
+
+`endif // COMPLEX_EXAMPLE
+
 
 //------------------------------------------------------------------------------
 //
@@ -93,6 +142,18 @@ pll pll_inst
     .clk_out1 ( clk        ),
     .locked   ( pll_locked )
 );
-
+//-------------------------------------------------------------------------------
+`ifdef COMPLEX_EXAMPLE
+adder_m adder
+(   
+    .clk ( clk ),
+    .rst ( rst ),
+    .a   ( a   ),
+    .b   ( b   ),
+    .out ( o   )
+ );
+`endif // COMPLEX_EXAMPLE
+//-------------------------------------------------------------------------------
 endmodule
 //-------------------------------------------------------------------------------
+
