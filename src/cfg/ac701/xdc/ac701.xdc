@@ -70,13 +70,6 @@ set_property PACKAGE_PIN L22 [get_ports valid_b]
 set_property PACKAGE_PIN L23 [get_ports valid_out]
 
 #-------------------------------------------------------------------------------
-#set_property DIRECTION IN  [get_ports valid_a]
-#set_property DIRECTION IN  [get_ports valid_b]
-#set_property DIRECTION OUT [get_ports valid_out]
-#set_property DIRECTION OUT [get_ports clk_out]
-#set_property DIRECTION IN  [get_ports {dinp_a[*]}]
-#set_property DIRECTION IN  [get_ports {dinp_b[*]}]
-#set_property DIRECTION OUT [get_ports {out[*]}]
 
 set_property DRIVE 12 [get_ports clk_out]
 set_property DRIVE 12 [get_ports ready_a]

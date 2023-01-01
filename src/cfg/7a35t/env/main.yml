@@ -6,3 +6,5 @@ parameters:
     TESTBENCH_NAME : top_tb
     DEVICE         : xc7a35ticsg324-1L
 
+    DATA_WIDTH     : 4
+
