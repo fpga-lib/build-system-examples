@@ -1,4 +1,5 @@
 
 sources:
     - src/syn/top.sv
+    - src/syn/adder.sv
 
