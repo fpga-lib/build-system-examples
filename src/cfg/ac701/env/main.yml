@@ -1,8 +1,13 @@
 
 parameters:
-    VARIANT_NAME   : ac701
-    PROJECT_NAME   : = VARIANT_NAME
-    TOP_NAME       : top
-    TESTBENCH_NAME : top_tb
-    DEVICE         : xc7a200tfbg676-2
+    VARIANT_NAME       : ac701
+    PROJECT_NAME       : = VARIANT_NAME
+    TOP_NAME           : top
+    TESTBENCH_NAME     : top_tb
+    DEVICE             : xc7a200tfbg676-2
+                       
+    COMPLEX_EXAMPLE    : ''
+    DATA_WIDTH         : 8
+    FIFO_DEPTH         : 32
+    FIFO_DCOUNT_WIDTH  : = clog2(FIFO_DEPTH)
 
