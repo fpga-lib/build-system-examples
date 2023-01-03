@@ -54,17 +54,14 @@ logic ref_clk;
 `endif
 
 logic clk;
+logic clk2;
 logic pll_locked;
 logic rst;
-
-`ifndef COMPLEX_EXAMPLE
 
 logic [DATA_W-1:0] a_reg       = 0;
 logic [DATA_W-1:0] b_reg       = 0;
 logic              valid_a_reg = 0;
 logic              valid_b_reg = 0;
-
-`endif // COMPLEX_EXAMPLE
 
 dinp_if #( .DATA_W ( DATA_W   ) ) a();
 dinp_if #( .DATA_W ( DATA_W   ) ) b();
@@ -97,26 +94,6 @@ assign dbg_pll_locked = pll_locked;
 //
 assign rst     = ~pll_locked;
 
-`ifdef COMPLEX_EXAMPLE
-
-assign a.valid   = valid_a;
-assign b.valid   = valid_b;
-                 
-assign ready_a   = a.ready;
-assign ready_b   = b.ready;
-                 
-assign a.data    = dinp_a;
-assign b.data    = dinp_b;
-
-assign out       = o.data;
-assign valid_out = o.valid;
-
-`else
-
-assign ready_a   = 1;
-assign ready_b   = 1;
-assign valid_out = 1;
-
 always_ff @(posedge clk) begin
     a_reg       <= dinp_a;
     b_reg       <= dinp_b;
@@ -124,6 +101,27 @@ always_ff @(posedge clk) begin
     valid_b_reg <= valid_b;
 end
 
+`ifdef COMPLEX_EXAMPLE
+
+assign a.valid   = valid_a_reg;
+assign b.valid   = valid_b_reg;
+                 
+assign ready_a   = a.ready;
+assign ready_b   = b.ready;
+                 
+assign a.data    = a_reg;
+assign b.data    = b_reg;
+
+always_ff @(posedge clk) begin
+    out       <= o.data;
+    valid_out <= o.valid;
+end
+
+`else
+
+assign ready_a   = 1;
+assign ready_b   = 1;
+assign valid_out = 1;
 
 always_ff @(posedge clk) begin
     if(rst) begin
@@ -156,6 +154,7 @@ pll pll_inst
 (
     .clk_in1  ( ref_clk    ),
     .clk_out1 ( clk        ),
+    .clk_out2 ( clk2       ),
     .locked   ( pll_locked )
 );
 //-------------------------------------------------------------------------------
@@ -167,10 +166,10 @@ ODDR
 ) 
 clk_out_gen 
 (
-    .C  ( clk     ),  // 1-bit clock input
+    .C  ( clk2    ),  // 1-bit clock input
     .CE ( 1'b1    ),  // 1-bit clock enable input
-    .D1 ( 1'b0    ),  // 1-bit data input (positive edge)
-    .D2 ( 1'b1    ),  // 1-bit data input (negative edge)
+    .D1 ( 1'b1    ),  // 1-bit data input (positive edge)
+    .D2 ( 1'b0    ),  // 1-bit data input (negative edge)
     .R  ( 1'b0    ),  // 1-bit reset
     .S  ( 1'b0    ),  // 1-bit set
     .Q  ( clk_out )   // 1-bit DDR output

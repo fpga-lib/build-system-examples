@@ -1,14 +1,12 @@
 
-import : board
+import : board main
 
 parameters:
-    REF_CLK         : = board.OSC_FREQ              # MHz
-    MAIN_CLK        : 125                           # MHz   
-    DIFF_REFCLK     : = 'yes' if board.DIFF_REFCLK else '__NO_DEFINE__'
-
-    CLK_FREQ        : = int(REF_CLK*1e6)
-    CLK_PERIOD      : = str(1e9/CLK_FREQ) + 'ns'    #
-    CLK_HALF_PERIOD : = str(1e9/CLK_FREQ/2) + 'ns'  #
-
-    REF_CLK_PERIOD  : = str(int(1e3/REF_CLK))
+    REF_CLK             : = board.OSC_FREQ              # MHz
+    MAIN_CLK            : 125                           # MHz   
+    CLK_OUT_PHASE_SHIFT : = main.CLK_OUT_PHASE_SHIFT
+    DIFF_REFCLK         : = 'yes' if board.DIFF_REFCLK else '__NO_DEFINE__'
+                        
+    REF_CLK_PERIOD      : = str(1e3/REF_CLK)
+    REF_CLK_HALF_PERIOD : = str(1e3/REF_CLK/2)
 

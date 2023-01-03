@@ -1,10 +1,10 @@
 
 parameters:
-    VARIANT_NAME   : 7a50t
-    PROJECT_NAME   : = VARIANT_NAME
-    TOP_NAME       : top
-    TESTBENCH_NAME : top_tb
-    DEVICE         : xc7a50tftg256-1
-
-    DATA_WIDTH     : 4
-
+    VARIANT_NAME        : 7a50t
+    PROJECT_NAME        : = VARIANT_NAME
+    TOP_NAME            : top
+    TESTBENCH_NAME      : top_tb
+    DEVICE              : xc7a50tftg256-1
+                        
+    DATA_WIDTH          : 4
+    CLK_OUT_PHASE_SHIFT : 220

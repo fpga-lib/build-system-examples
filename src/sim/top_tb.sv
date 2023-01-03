@@ -16,7 +16,7 @@ module top_tb;
 //
 //    Settings
 //
-localparam CLK_HALF_PERIOD = `CLK_HALF_PERIOD;
+localparam CLK_HALF_PERIOD = `REF_CLK_HALF_PERIOD;
 localparam DATA_W          = `DATA_WIDTH;
     
 //------------------------------------------------------------------------------
