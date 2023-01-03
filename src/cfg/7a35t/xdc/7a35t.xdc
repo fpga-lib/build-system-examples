@@ -20,13 +20,6 @@ set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports ref_clk]
 set_switching_activity -deassert_resets
 
 #-------------------------------------------------------------------------------
-#    dnum
-#-------------------------------------------------------------------------------
-
-set_property IOSTANDARD LVCMOS33 [get_ports {out}]
-#set_property IOB TRUE [get_ports {dnum}]
-
-#-------------------------------------------------------------------------------
 #    Pin locations
 #-------------------------------------------------------------------------------
 
