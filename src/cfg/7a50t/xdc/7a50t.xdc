@@ -19,6 +19,18 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property -dict {PACKAGE_PIN N11 IOSTANDARD LVCMOS33} [get_ports ref_clk]
 set_switching_activity -deassert_resets
 
+
+#-------------------------------------------------------------------------------
+#    Timing
+#-------------------------------------------------------------------------------
+
+create_clock -period 10.000 -name ref_clk -waveform {0.000 5.000} [get_ports ref_clk]
+
+create_generated_clock -name clk_out -source [get_pins clk_out_gen/C] -multiply_by 1 -invert [get_pins clk_out_gen/C]
+
+set_input_delay  -clock [get_clocks clk_out] 0.0 [get_ports {{dinp_a[0]} {dinp_a[1]} {dinp_a[2]} {dinp_a[3]} {dinp_b[0]} {dinp_b[1]} {dinp_b[2]} {dinp_b[3]} valid_a valid_b}]
+set_output_delay -clock [get_clocks clk_out] 0.0 [get_ports {{out[0]} {out[1]} {out[2]} {out[3]} {out[4]} ready_a ready_b}]
+
 #-------------------------------------------------------------------------------
 #    Pin locations
 #-------------------------------------------------------------------------------
@@ -50,17 +62,23 @@ set_property PACKAGE_PIN N14 [get_ports valid_b]
 set_property PACKAGE_PIN P14 [get_ports valid_out]
 
 #-------------------------------------------------------------------------------
+set_property IOB true [get_ports {out[*]}]
+set_property IOB true [get_cells -hierarchical "a_reg*" ]
+set_property IOB true [get_cells -hierarchical "b_reg*" ]
+set_property IOB true [get_cells -hierarchical "valid_a_reg*" ]
+set_property IOB true [get_cells -hierarchical "valid_b_reg*" ]
+
 set_property DRIVE 12 [get_ports clk_out]
 set_property DRIVE 12 [get_ports ready_a]
 set_property DRIVE 12 [get_ports ready_b]
 set_property DRIVE 12 [get_ports valid_out]
 set_property DRIVE 12 [get_ports {out[*]}]
 
-set_property SLEW SLOW [get_ports clk_out]
-set_property SLEW SLOW [get_ports ready_a]
-set_property SLEW SLOW [get_ports ready_b]
-set_property SLEW SLOW [get_ports valid_out]
-set_property SLEW SLOW [get_ports {out[*]}]
+set_property SLEW FAST [get_ports clk_out]
+set_property SLEW FAST [get_ports ready_a]
+set_property SLEW FAST [get_ports ready_b]
+set_property SLEW FAST [get_ports valid_out]
+set_property SLEW FAST [get_ports {out[*]}]
 
 set_property IOSTANDARD LVCMOS33 [get_ports clk_out]
 set_property IOSTANDARD LVCMOS33 [get_ports valid_a]
