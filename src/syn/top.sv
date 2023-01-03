@@ -57,6 +57,15 @@ logic clk;
 logic pll_locked;
 logic rst;
 
+`ifndef COMPLEX_EXAMPLE
+
+logic [DATA_W-1:0] a_reg       = 0;
+logic [DATA_W-1:0] b_reg       = 0;
+logic              valid_a_reg = 0;
+logic              valid_b_reg = 0;
+
+`endif // COMPLEX_EXAMPLE
+
 dinp_if #( .DATA_W ( DATA_W   ) ) a();
 dinp_if #( .DATA_W ( DATA_W   ) ) b();
 dout_if #( .DATA_W ( DATA_W+1 ) ) o();
@@ -87,7 +96,6 @@ assign dbg_pll_locked = pll_locked;
 //    Logic
 //
 assign rst     = ~pll_locked;
-assign clk_out = clk;
 
 `ifdef COMPLEX_EXAMPLE
 
@@ -110,12 +118,20 @@ assign ready_b   = 1;
 assign valid_out = 1;
 
 always_ff @(posedge clk) begin
+    a_reg       <= dinp_a;
+    b_reg       <= dinp_b;
+    valid_a_reg <= valid_a;
+    valid_b_reg <= valid_b;
+end
+
+
+always_ff @(posedge clk) begin
     if(rst) begin
         out <= 0;
     end
     else begin
-        if(valid_a && valid_b) begin
-            out <= dinp_a + dinp_b;
+        if(valid_a_reg && valid_b_reg) begin
+            out <= a_reg + b_reg;
         end
     end
 end
@@ -141,6 +157,23 @@ pll pll_inst
     .clk_in1  ( ref_clk    ),
     .clk_out1 ( clk        ),
     .locked   ( pll_locked )
+);
+//-------------------------------------------------------------------------------
+ODDR 
+#(
+   .DDR_CLK_EDGE ("OPPOSITE_EDGE" ),  // "OPPOSITE_EDGE" or "SAME_EDGE"
+   .INIT         (1'b0            ),  // Initial value of Q: 1'b0 or 1'b1
+   .SRTYPE       ("SYNC"          )   // Set/Reset type: "SYNC" or "ASYNC"
+) 
+clk_out_gen 
+(
+    .C  ( clk     ),  // 1-bit clock input
+    .CE ( 1'b1    ),  // 1-bit clock enable input
+    .D1 ( 1'b0    ),  // 1-bit data input (positive edge)
+    .D2 ( 1'b1    ),  // 1-bit data input (negative edge)
+    .R  ( 1'b0    ),  // 1-bit reset
+    .S  ( 1'b0    ),  // 1-bit set
+    .Q  ( clk_out )   // 1-bit DDR output
 );
 //-------------------------------------------------------------------------------
 `ifdef COMPLEX_EXAMPLE
