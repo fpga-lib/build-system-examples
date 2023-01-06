@@ -1,0 +1,69 @@
+
+import os
+
+Import('envx')
+
+add_search_path( os.path.join( os.getcwd(), os.pardir, os.pardir, 'env') )
+add_search_path( os.path.join( os.getcwd(), os.pardir, os.pardir, os.pardir, 'common', 'env') )
+
+cfg  = import_config('main.yml')
+
+#-------------------------------------------------------------------------------
+#
+#   Environment
+#
+name = 'adder'
+
+build_path = str(Dir(os.path.join('#build', 'csim/adder')))
+src_path   = str(Dir(os.path.join('#src', 'hls', 'adder')))
+
+try:
+    src  = read_sources('src_csyn.yml')
+    src += read_sources('src_csim.yml')
+
+except SearchFileException as e:
+    print_error('E: read config: ' + e.msg)
+    print_error('    while processing "test/snmp/sw/sw.scons"')
+    Exit(-1)
+
+
+envx.Append(CPPPATH = [os.path.join(os.environ['XILINX'], 'Vitis_HLS/2021.2/include'), 
+                       os.path.join(os.environ['MENTOR'], 'questa/questasim/include')])
+
+envx.Append(CPPPATH = get_dirs(src))
+
+envx.Append(CXXFLAGS = '-DDATA_WIDTH=' + str(cfg.DATA_WIDTH))
+
+#-------------------------------------------------------------------------------
+#
+#   Targets
+#
+envx.VariantDir(build_path, src_path , duplicate = False)
+
+src_list = [i.replace(src_path, build_path) for i in src]
+trg_path = os.path.join(build_path, name)
+trg = envx.Program(trg_path, src_list)
+
+#-------------------------------------------------------------------------------
+#
+#   Run
+#
+#-------------------------------------------------------------------------------
+def run_target(target, source, env):
+    return env.Execute(str(source[0]))
+
+#-------------------------------------------------------------------------------
+
+execute = envx.Command('execute', trg, run_target)
+
+Depends(execute, trg)
+
+envx.AlwaysBuild(execute)
+Default(execute)
+
+envx.Alias('adder', trg)
+
+Return('execute')
+
+#-------------------------------------------------------------------------------
+
