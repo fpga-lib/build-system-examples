@@ -39,11 +39,9 @@ logic clk;
 
 logic [DATA_W-1:0] dinp_a = 1;
 logic              valid_a;
-logic              ready_a;
 
 logic [DATA_W-1:0] dinp_b = 2;
 logic              valid_b;
-logic              ready_b;
 
 logic [ DATA_W:0]  out;
 logic              valid_out;
@@ -71,13 +69,8 @@ assign valid_a = 1;
 assign valid_b = 1;
 
 always_ff @(posedge clk) begin
-    if(ready_a) begin
-        dinp_a <= dinp_a + 1;
-    end
-    
-    if(ready_b) begin
-        dinp_b <= dinp_b + 1;
-    end
+    dinp_a <= dinp_a + 1;
+    dinp_b <= dinp_b + 1;
 end
 
 initial begin
@@ -102,10 +95,8 @@ top top_inst
     .clk_out   ( clk       ),
     .dinp_a    ( dinp_a    ),
     .valid_a   ( valid_a   ),
-    .ready_a   ( ready_a   ),
     .dinp_b    ( dinp_b    ),
     .valid_b   ( valid_b   ),
-    .ready_b   ( ready_b   ),
     .out       ( out       ),
     .valid_out ( valid_out )
 );

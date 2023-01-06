@@ -25,11 +25,9 @@ module automatic top
 
     input  logic [DATA_W-1:0] dinp_a,
     input  logic              valid_a,
-    output logic              ready_a,
 
     input  logic [DATA_W-1:0] dinp_b,
     input  logic              valid_b,
-    output logic              ready_b,
 
     output logic [ DATA_W:0]  out,
     output logic              valid_out
@@ -63,10 +61,11 @@ logic [DATA_W-1:0] b_reg       = 0;
 logic              valid_a_reg = 0;
 logic              valid_b_reg = 0;
 
+`ifdef COMPLEX_EXAMPLE
 dinp_if #( .DATA_W ( DATA_W   ) ) a();
 dinp_if #( .DATA_W ( DATA_W   ) ) b();
 dout_if #( .DATA_W ( DATA_W+1 ) ) o();
-
+`endif // COMPLEX_EXAMPLE
 
 //------------------------------------------------------------------------------
 //
@@ -105,10 +104,6 @@ end
 
 assign a.valid   = valid_a_reg;
 assign b.valid   = valid_b_reg;
-                 
-assign ready_a   = a.ready;
-assign ready_b   = b.ready;
-                 
 assign a.data    = a_reg;
 assign b.data    = b_reg;
 
@@ -119,17 +114,15 @@ end
 
 `else
 
-assign ready_a   = 1;
-assign ready_b   = 1;
-assign valid_out = 1;
-
 always_ff @(posedge clk) begin
     if(rst) begin
         out <= 0;
     end
     else begin
+        valid_out <= 0;
         if(valid_a_reg && valid_b_reg) begin
-            out <= a_reg + b_reg;
+            out       <= a_reg + b_reg;
+            valid_out <= 1;
         end
     end
 end
