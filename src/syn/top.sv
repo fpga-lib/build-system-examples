@@ -61,11 +61,11 @@ logic [DATA_W-1:0] b_reg       = 0;
 logic              valid_a_reg = 0;
 logic              valid_b_reg = 0;
 
-`ifdef COMPLEX_EXAMPLE
+`ifdef ADDER_MODULE
 dinp_if #( .DATA_W ( DATA_W   ) ) a();
 dinp_if #( .DATA_W ( DATA_W   ) ) b();
 dout_if #( .DATA_W ( DATA_W+1 ) ) o();
-`endif // COMPLEX_EXAMPLE
+`endif // ADDER_MODULE
 
 //------------------------------------------------------------------------------
 //
@@ -100,7 +100,7 @@ always_ff @(posedge clk) begin
     valid_b_reg <= valid_b;
 end
 
-`ifdef COMPLEX_EXAMPLE
+`ifdef ADDER_MODULE
 
 assign a.valid   = valid_a_reg;
 assign b.valid   = valid_b_reg;
@@ -127,7 +127,7 @@ always_ff @(posedge clk) begin
     end
 end
 
-`endif // COMPLEX_EXAMPLE
+`endif // ADDER_MODULE
 
 
 //------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ clk_out_gen
     .Q  ( clk_out )   // 1-bit DDR output
 );
 //-------------------------------------------------------------------------------
-`ifdef COMPLEX_EXAMPLE
+`ifdef ADDER_MODULE
 adder_m adder
 (   
     .clk ( clk ),
@@ -177,7 +177,7 @@ adder_m adder
     .b   ( b   ),
     .out ( o   )
  );
-`endif // COMPLEX_EXAMPLE
+`endif // ADDER_MODULE
 //-------------------------------------------------------------------------------
 endmodule
 //-------------------------------------------------------------------------------

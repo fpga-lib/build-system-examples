@@ -6,6 +6,6 @@ parameters:
     TESTBENCH_NAME      : top_tb
     DEVICE              : xc7a50tftg256-1
                         
-    COMPLEX_EXAMPLE     : ''
+    ADDER_MODULE        : ''
     DATA_WIDTH          : 4
     CLK_OUT_PHASE_SHIFT : 220

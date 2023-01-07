@@ -6,7 +6,7 @@ parameters:
     TESTBENCH_NAME      : top_tb
     DEVICE              : xc7a200tfbg676-2
                         
-    COMPLEX_EXAMPLE     : ''
+    ADDER_MODULE        : ''
     DATA_WIDTH          : 8
     FIFO_DEPTH          : 32
     FIFO_DCOUNT_WIDTH   : = clog2(FIFO_DEPTH)
