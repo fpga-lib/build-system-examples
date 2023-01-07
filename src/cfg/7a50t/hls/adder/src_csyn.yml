@@ -1,0 +1,4 @@
+
+sources:
+    - src/hls/adder/src/adder.cpp
+

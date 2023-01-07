@@ -15,7 +15,7 @@ class BuildBase:
 
     def __init__(self, env, **src_dict):
 
-        self.envx     = env
+        self.envx = env
         
         src_keys = ['src_syn', 'src_sim', 'ip', 'bd', 'hls']
         for k in src_dict:
@@ -33,7 +33,7 @@ class BuildBase:
 
         self.add_hls_script_targets()
         self.add_hls_targets()
-        self.add_ip_tagets()
+        self.add_ip_targets()
         self.add_bd_targets()
         self.add_hdl_params_targets()
         self.add_tcl_params_targets()
@@ -114,18 +114,17 @@ class BuildBase:
         cfg = import_config('main.yml')
         env = import_config('env.yml')
 
-        self.envx['ENV']['PATH']          = os.environ['PATH']
-        self.envx['ENV']['CAD']           = os.environ['CAD']
-        self.envx['ENV']['DISPLAY']       = os.environ['DISPLAY']
-        self.envx['ENV']['HOME']          = os.environ['HOME']
-        self.envx['ENV']['XILINX']        = env.XILINX
-        self.envx['ENV']['MENTOR']        = env.MENTOR
-        self.envx['ENV']['XILINX_VIVADO'] = env.XILINX_VIVADO
-        self.envx['QUESTABIN']            = env.QUESTABIN
-        self.envx['QUESTASIM']            = env.QUESTASIM
-        self.envx['VENDOR_LIB_PATH']      = env.VENDOR_LIB_PATH
-        self.envx['XILINX_VIVADO']        = env.XILINX_VIVADO
-        self.envx['XILINX_HLS']           = env.XILINX_HLS
+        self.envx['ENV']['DISPLAY']            = os.environ['DISPLAY']
+        self.envx['ENV']['HOME']               = os.environ['HOME']
+        self.envx['ENV']['XILINX']             = env.XILINX
+        self.envx['ENV']['MENTOR']             = env.MENTOR
+        self.envx['ENV']['MGLS_LICENSE_FILE']  = env.MGLS_LICENSE_FILE
+        self.envx['ENV']['XILINX_VIVADO']      = env.XILINX_VIVADO
+        self.envx['XILINX_VIVADO']             = env.XILINX_VIVADO
+        self.envx['XILINX_HLS']                = env.XILINX_HLS
+        self.envx['QUESTABIN']                 = env.QUESTABIN
+        self.envx['QUESTASIM']                 = env.QUESTASIM
+        self.envx['VENDOR_LIB_PATH']           = env.VENDOR_LIB_PATH
 
         self.envx.Tool('vivado')
         self.envx.Tool('questa')
@@ -168,7 +167,7 @@ class BuildBase:
         self.HlsCsyn = self.envx.LaunchHlsCSynth(self.HlsCSynScripts, self.hls)
 
     #---------------------------------------------------------------------------
-    def add_ip_tagets(self):
+    def add_ip_targets(self):
         #   IP scripts
         self.IP_Create_Scripts  = self.envx.IpCreateScripts(self.ip)
         self.IP_Syn_Scripts     = self.envx.IpSynScripts(self.ip)
@@ -315,8 +314,6 @@ class BuildBase:
 
             Optional arguments:
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                with_mac=<0|1>        : enables simulation with MACs
-                simple_test_msg=<0|1> : if set to 1 (default) replaces progress bar with simple info messages
                 no_colors=<0|1>       : on/off messages colorization
 
         ********************************************************************************

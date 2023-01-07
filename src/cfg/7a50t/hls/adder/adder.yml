@@ -1,0 +1,26 @@
+
+import : main env clk
+
+parameters:
+    name                   : adder
+    version                : 1.0
+    vendor                 : slon
+    library                : hls
+
+    clock_period           : = str(1000/clk.MAIN_CLK) + 'ns'
+    clock_name             : adder_clk
+    clock_uncertainty      : 25%
+
+    cflags                 : = ' -g' + ' -DDATA_WIDTH=' + str(main.DATA_WIDTH)
+
+    csimflags              : = ' -g' +
+                               ' -I' + os.path.join(env.QUESTABASE, 'include') +
+                               ' -I' + os.path.join(env.XILINX_HLS, 'include')
+
+    src_csyn_list          : src_csyn.yml
+    src_csim_list          : src_csim.yml
+    hook_list              : directives.yml
+
+
+
+
