@@ -22,7 +22,7 @@ Import('envx')
 envx['ARGUMENTS']            = ARGUMENTS
 envx['COMMAND_LINE_TARGETS'] = COMMAND_LINE_TARGETS
 
-bv = BuildBase(envx)
+bv = BuildBase(envx, bd='bd.yml')
 
 #-------------------------------------------------------------------------------
 

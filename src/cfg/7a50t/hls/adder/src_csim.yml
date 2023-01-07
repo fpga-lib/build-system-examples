@@ -1,0 +1,4 @@
+
+sources:
+    - src/hls/adder/tb/main.cpp
+

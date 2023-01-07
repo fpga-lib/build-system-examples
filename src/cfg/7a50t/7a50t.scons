@@ -22,7 +22,13 @@ Import('envx')
 envx['ARGUMENTS']            = ARGUMENTS
 envx['COMMAND_LINE_TARGETS'] = COMMAND_LINE_TARGETS
 
-bv = BuildBase(envx)
+class Build7a50t(BuildBase):
+    def __init__(self, env, **src_list):
+        super().__init__(env, **src_list)
+        self.adder = SConscript(os.path.join('hls', 'adder', 'adder.scons'), exports = 'envx')
+        Depends(self.LaunchQuestaRun,    self.adder)
+
+bv = Build7a50t(envx, hls = 'hls.yml')
 
 #-------------------------------------------------------------------------------
 

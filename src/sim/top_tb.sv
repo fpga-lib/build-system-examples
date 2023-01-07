@@ -4,7 +4,6 @@
 //
 //     Purpose: Default testbench file
 //
-//
 //-------------------------------------------------------------------------------
 
 `include "cfg_params.svh"
@@ -13,11 +12,22 @@
 
 module top_tb;
 
-localparam CLK_HALF_PERIOD = `CLK_HALF_PERIOD;
-localparam WIDTH           = `WIDTH;
+//------------------------------------------------------------------------------
+//
+//    Settings
+//
+localparam CLK_HALF_PERIOD = `REF_CLK_HALF_PERIOD;
+localparam DATA_W          = `DATA_WIDTH;
     
-logic [WIDTH-1:0] out; 
-
+//------------------------------------------------------------------------------
+//
+//    Types
+//
+    
+//------------------------------------------------------------------------------
+//
+//    Objects
+//
 `ifdef DIFF_REFCLK
 logic ref_clk_p = 0;
 logic ref_clk_n = 1;
@@ -25,7 +35,22 @@ logic ref_clk_n = 1;
 logic ref_clk = 0;
 `endif
 
+logic clk;
+
+logic [DATA_W-1:0] dinp_a = 1;
+logic              valid_a;
+
+logic [DATA_W-1:0] dinp_b = 2;
+logic              valid_b;
+
+logic [ DATA_W:0]  out;
+logic              valid_out;
+
     
+//------------------------------------------------------------------------------
+//
+//    Logic
+//
 `ifdef DIFF_REFCLK
 always begin
     #CLK_HALF_PERIOD
@@ -35,10 +60,18 @@ end
 `else
 always begin
     #CLK_HALF_PERIOD
-     ref_clk = ~ref_clk;
+    ref_clk = ~ref_clk;
 end
 `endif
 
+
+assign valid_a = 1;
+assign valid_b = 1;
+
+always_ff @(posedge clk) begin
+    dinp_a <= dinp_a + 1;
+    dinp_b <= dinp_b + 1;
+end
 
 initial begin
     #10us
@@ -46,6 +79,10 @@ initial begin
     $stop(2);   
 end 
 
+//------------------------------------------------------------------------------
+//
+//    Instances
+//
 top top_inst
 (
 `ifdef DIFF_REFCLK
@@ -55,8 +92,15 @@ top top_inst
     .ref_clk   ( ref_clk   ),
 `endif
 
-    .out       ( out       )
+    .clk_out   ( clk       ),
+    .dinp_a    ( dinp_a    ),
+    .valid_a   ( valid_a   ),
+    .dinp_b    ( dinp_b    ),
+    .valid_b   ( valid_b   ),
+    .out       ( out       ),
+    .valid_out ( valid_out )
 );
 
 endmodule
 //-------------------------------------------------------------------------------
+
