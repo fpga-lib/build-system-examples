@@ -1,6 +1,6 @@
 
 parameters:
-    VARIANT_NAME        : 7a35t
+    VARIANT_NAME        : = ARGUMENTS['bv']
     PROJECT_NAME        : = VARIANT_NAME
     TOP_NAME            : top
     TESTBENCH_NAME      : top_tb
