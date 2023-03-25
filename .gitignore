@@ -26,6 +26,7 @@ transcript
 modelsim.ini
 *.vpwhistu
 *.vtg
+*.vpwwildcardcache
 *.swp
 *.bit
 *.pdi
