@@ -114,7 +114,7 @@ class BuildBase:
         cfg = import_config('main.yml')
         env = import_config('env.yml')
 
-        self.envx['ENV']['DISPLAY']            = os.environ['DISPLAY']
+        self.envx['ENV']['DISPLAY']            = os.environ['DISPLAY'] if 'DISPLAY' in os.environ else 0
         self.envx['ENV']['HOME']               = os.environ['HOME']
         self.envx['ENV']['XILINX']             = env.XILINX
         self.envx['ENV']['MENTOR']             = env.MENTOR
