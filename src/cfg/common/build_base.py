@@ -114,8 +114,8 @@ class BuildBase:
         cfg = import_config('main.yml')
         env = import_config('env.yml')
 
-        self.envx['ENV']['DISPLAY']            = os.environ['DISPLAY'] if 'DISPLAY' in os.environ else 0
-        self.envx['ENV']['HOME']               = os.environ['HOME']
+        self.envx['ENV']['DISPLAY']            = os.environ['DISPLAY'] if 'DISPLAY' in os.environ else '0'
+        self.envx['ENV']['HOME']               = os.environ['HOME']    if 'HOME'    in os.environ else ''
         self.envx['ENV']['XILINX']             = env.XILINX
         self.envx['ENV']['MENTOR']             = env.MENTOR
         self.envx['ENV']['MGLS_LICENSE_FILE']  = env.MGLS_LICENSE_FILE
