@@ -27,8 +27,8 @@ except SearchFileException as e:
     Exit(-1)
 
 
-envx.Append(CPPPATH = [os.path.join(os.environ['XILINX'], 'Vitis_HLS/2021.2/include'), 
-                       os.path.join(os.environ['MENTOR'], 'questa/questasim/include')])
+envx.Append(CPPPATH = [os.path.join(envx['XILINX_HLS'], 'include'),
+                       os.path.join(envx['QUESTABASE'], 'include')])
 
 envx.Append(CPPPATH = get_dirs(src))
 
