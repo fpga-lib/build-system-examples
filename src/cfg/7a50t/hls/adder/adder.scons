@@ -5,6 +5,7 @@ Import('envx')
 
 add_search_path( os.path.join( os.getcwd(), os.pardir, os.pardir, 'env') )
 add_search_path( os.path.join( os.getcwd(), os.pardir, os.pardir, os.pardir, 'common', 'env') )
+add_search_path( os.getcwd() )
 
 cfg  = import_config('main.yml')
 
@@ -23,7 +24,7 @@ try:
 
 except SearchFileException as e:
     print_error('E: read config: ' + e.msg)
-    print_error('    while processing "test/snmp/sw/sw.scons"')
+    print_error('    while processing "{}"'.format(os.path.join(cfg.VARIANT_NAME, 'hls', 'adder', 'adder.scons')) )
     Exit(-1)
 
 
