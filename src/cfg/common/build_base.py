@@ -126,6 +126,9 @@ class BuildBase:
         self.envx['QUESTASIM']                 = env.QUESTASIM
         self.envx['VENDOR_LIB_PATH']           = env.VENDOR_LIB_PATH
 
+        self.envx['ROOT_PATH']                 = self.dirs.ROOT
+        self.envx['BUILD_PATH']                = self.dirs.BUILD
+
         self.envx.Tool('vivado')
         self.envx.Tool('questa')
 
