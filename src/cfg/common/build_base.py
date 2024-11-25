@@ -122,9 +122,13 @@ class BuildBase:
         self.envx['ENV']['XILINX_VIVADO']      = env.XILINX_VIVADO
         self.envx['XILINX_VIVADO']             = env.XILINX_VIVADO
         self.envx['XILINX_HLS']                = env.XILINX_HLS
+        self.envx['QUESTABASE']                = env.QUESTABASE
         self.envx['QUESTABIN']                 = env.QUESTABIN
         self.envx['QUESTASIM']                 = env.QUESTASIM
         self.envx['VENDOR_LIB_PATH']           = env.VENDOR_LIB_PATH
+
+        self.envx['ROOT_PATH']                 = self.dirs.ROOT
+        self.envx['BUILD_PATH']                = self.dirs.BUILD
 
         self.envx.Tool('vivado')
         self.envx.Tool('questa')

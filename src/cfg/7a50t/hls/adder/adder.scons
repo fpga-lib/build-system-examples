@@ -5,6 +5,7 @@ Import('envx')
 
 add_search_path( os.path.join( os.getcwd(), os.pardir, os.pardir, 'env') )
 add_search_path( os.path.join( os.getcwd(), os.pardir, os.pardir, os.pardir, 'common', 'env') )
+add_search_path( os.getcwd() )
 
 cfg  = import_config('main.yml')
 
@@ -23,12 +24,12 @@ try:
 
 except SearchFileException as e:
     print_error('E: read config: ' + e.msg)
-    print_error('    while processing "test/snmp/sw/sw.scons"')
+    print_error('    while processing "{}"'.format(os.path.join(cfg.VARIANT_NAME, 'hls', 'adder', 'adder.scons')) )
     Exit(-1)
 
 
-envx.Append(CPPPATH = [os.path.join(os.environ['XILINX'], 'Vitis_HLS/2021.2/include'), 
-                       os.path.join(os.environ['MENTOR'], 'questa/questasim/include')])
+envx.Append(CPPPATH = [os.path.join(envx['XILINX_HLS'], 'include'),
+                       os.path.join(envx['QUESTABASE'], 'include')])
 
 envx.Append(CPPPATH = get_dirs(src))
 

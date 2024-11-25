@@ -34,8 +34,6 @@ module automatic adder_m
 //
 //    Objects
 //
-logic ap_local_block;
-logic ap_local_deadlock;
 
 //------------------------------------------------------------------------------
 //
@@ -53,16 +51,14 @@ logic ap_local_deadlock;
 //
 adder_hlsip adder_hls
 (
-    .ap_clk            (  clk              ),
-    .ap_rst            (  rst              ),
-    .ap_local_block    ( ap_local_block    ),
-    .ap_local_deadlock ( ap_local_deadlock ),
-    .a_ap_vld          ( a.valid           ),
-    .a                 ( a.data            ),
-    .b_ap_vld          ( b.valid           ),
-    .b                 ( b.data            ),
-    .out_r_ap_vld      ( out.valid         ),
-    .out_r             ( out.data          )
+    .ap_clk       (  clk      ),
+    .ap_rst       (  rst      ),
+    .a_ap_vld     ( a.valid   ),
+    .a            ( a.data    ),
+    .b_ap_vld     ( b.valid   ),
+    .b            ( b.data    ),
+    .out_r_ap_vld ( out.valid ),
+    .out_r        ( out.data  )
 );
 //-------------------------------------------------------------------------------
 endmodule
