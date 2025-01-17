@@ -22,7 +22,7 @@ tabulate.PRESERVE_WHITESPACE = True
 #   Timing report
 #
 def timing_report(env):
-    slack_pattern = 'Design Timing Summary[^$]+WNS\(ns\)\s+TNS\(ns\)\s+.+WHS\(ns\)\s+THS\(ns\).+\n[\s\-]+\n\s+(\-?[0-9\.]+)\s+(\-?[0-9\.]+)[\s\-]+([0-9\.]+)[\s\-]+([0-9\.]+)\s+(\-?[0-9\.]+)\s+(\-?[0-9\.]+)\s+'
+    slack_pattern = r'Design Timing Summary[^$]+WNS\(ns\)\s+TNS\(ns\)\s+.+WHS\(ns\)\s+THS\(ns\).+\n[\s\-]+\n\s+(\-?[0-9\.]+)\s+(\-?[0-9\.]+)[\s\-]+([0-9\.]+)[\s\-]+([0-9\.]+)\s+(\-?[0-9\.]+)\s+(\-?[0-9\.]+)\s+'
     filepath = os.path.join(env['BUILD_SYN_PATH'], env['VIVADO_PROJECT_NAME'] + '.runs', 'impl_1', env['TOP_NAME'] + '_final_timing.rpt')
     if not os.path.exists(filepath):
         print( colorize('Timing Summary Report file does not exist', 'yellow', True) )
@@ -79,7 +79,7 @@ def utilization_report(env):
     
     # processing utilization table header    
     header_cols    = ['Used', 'Available', 'Util%']
-    header_pattern = '\|\s+Site Type\s+\|(.+\%)'
+    header_pattern = r'\|\s+Site Type\s+\|(.+\%)'
     
     res = re.search(header_pattern, contents)
     if res:
@@ -93,39 +93,39 @@ def utilization_report(env):
     subpattern = ''
     for i in cols[:-1]:   # except Util%
         if i in header_cols:
-            grab = '(\d+)'
+            grab = r'(\d+)'
         else:
-            grab = '\d+'
-        subpattern += '\|\s+' + grab + '\s+'
+            grab = r'\d+'
+        subpattern += r'\|\s+' + grab + r'\s+'
         
-    subpattern += '\|\s+([<0-9\.]+)\s+\|'
+    subpattern += r'\|\s+([<0-9\.]+)\s+\|'
     
     
     patterns = { 
-        'CLB'                : '\|\s+CLB\s+'                   + subpattern,
-        'Slice'              : '\|\s+Slice\s+'                 + subpattern,
-        'CLB LUT'            : '\|\s+CLB LUTs\s+'              + subpattern,
-        'Slice LUT'          : '\|\s+Slice LUTs\s+'            + subpattern,
-        '  LUT Logic'        : '\|\s+LUT as Logic\s+'          + subpattern,
-        '  LUT RAM'          : '\|\s+LUT as Memory\s+'         + subpattern,
-        'CLB Registers'      : '\|\s+CLB Registers\s+'         + subpattern,
-        'Slice Registers'    : '\|\s+Slice Registers\s+'       + subpattern,
-        '  FF'               : '\|\s+Register as Flip Flop\s+' + subpattern,
-        '  LATCH'            : '\|\s+Register as Latch\s+'     + subpattern,
-        'BUFG'               : '\|\s+GLOBAL CLOCK BUFFERs\s+'  + subpattern,
-        'BUFGCTRL'           : '\|\s+BUFG.*\s+'                + subpattern,
-        'PLL'                : '\|\s+PLL.+\s+'                 + subpattern,
-        'MMCM'               : '\|\s+MMCM.+\s+'                + subpattern,
-        'I/O'                : '\|\s+Bonded IOB\s+'            + subpattern,
-        'GTH'                : '\|\s+GTH.+CHANNEL\s+'          + subpattern,
-        'GTX'                : '\|\s+GTX.+CHANNEL\s+'          + subpattern,
-        'GTY'                : '\|\s+GTY.+CHANNEL\s+'          + subpattern,
-        'BRAM Tile'          : '\|\s+Block RAM Tile\s+'        + subpattern,
-        '  RAMB36/FIFO'      : '\|\s+RAMB36/FIFO\*?\s+'        + subpattern,
-        '    RAMB36E2 only'  : '\|\s+RAMB36E2 only\s+'         + subpattern,
-        '  RAMB18'           : '\|\s+RAMB18\s+'                + subpattern,
-        '    RAMB36E2 only'  : '\|\s+RAMB36E2 only\s+'         + subpattern,
-        'URAM'               : '\|\s+URAM\s+'                  + subpattern
+        'CLB'                : r'\|\s+CLB\s+'                   + subpattern,
+        'Slice'              : r'\|\s+Slice\s+'                 + subpattern,
+        'CLB LUT'            : r'\|\s+CLB LUTs\s+'              + subpattern,
+        'Slice LUT'          : r'\|\s+Slice LUTs\s+'            + subpattern,
+        '  LUT Logic'        : r'\|\s+LUT as Logic\s+'          + subpattern,
+        '  LUT RAM'          : r'\|\s+LUT as Memory\s+'         + subpattern,
+        'CLB Registers'      : r'\|\s+CLB Registers\s+'         + subpattern,
+        'Slice Registers'    : r'\|\s+Slice Registers\s+'       + subpattern,
+        '  FF'               : r'\|\s+Register as Flip Flop\s+' + subpattern,
+        '  LATCH'            : r'\|\s+Register as Latch\s+'     + subpattern,
+        'BUFG'               : r'\|\s+GLOBAL CLOCK BUFFERs\s+'  + subpattern,
+        'BUFGCTRL'           : r'\|\s+BUFG.*\s+'                + subpattern,
+        'PLL'                : r'\|\s+PLL.+\s+'                 + subpattern,
+        'MMCM'               : r'\|\s+MMCM.+\s+'                + subpattern,
+        'I/O'                : r'\|\s+Bonded IOB\s+'            + subpattern,
+        'GTH'                : r'\|\s+GTH.+CHANNEL\s+'          + subpattern,
+        'GTX'                : r'\|\s+GTX.+CHANNEL\s+'          + subpattern,
+        'GTY'                : r'\|\s+GTY.+CHANNEL\s+'          + subpattern,
+        'BRAM Tile'          : r'\|\s+Block RAM Tile\s+'        + subpattern,
+        '  RAMB36/FIFO'      : r'\|\s+RAMB36/FIFO\*?\s+'        + subpattern,
+        '    RAMB36E2 only'  : r'\|\s+RAMB36E2 only\s+'         + subpattern,
+        '  RAMB18'           : r'\|\s+RAMB18\s+'                + subpattern,
+        '    RAMB36E2 only'  : r'\|\s+RAMB36E2 only\s+'         + subpattern,
+        'URAM'               : r'\|\s+URAM\s+'                  + subpattern
     }
     
     # output utilization summary    
@@ -152,10 +152,10 @@ def log_file_filter(env):
     syn_logpath  = os.path.join(env['BUILD_SYN_PATH'], env['VIVADO_PROJECT_NAME'] + '.runs', 'synth_1', 'runme.log')
     impl_logpath = os.path.join(env['BUILD_SYN_PATH'], env['VIVADO_PROJECT_NAME'] + '.runs', 'impl_1',  'runme.log')
     
-    warn_pattern             = '(WARNING:)(.+)'
-    crit_warn_pattern        = '(CRITICAL WARNING:)(.+)'
-    syn_elapsed_time_pattern = 'synth_design\:.+elapsed \= ([0-9\:]+)'
-    syn_elapsed_time_pattern = 'synth_design\:.+elapsed \= ([0-9\:]+)'
+    warn_pattern             = r'(WARNING:)(.+)'
+    crit_warn_pattern        = r'(CRITICAL WARNING:)(.+)'
+    syn_elapsed_time_pattern = r'synth_design\:.+elapsed \= ([0-9\:]+)'
+    syn_elapsed_time_pattern = r'synth_design\:.+elapsed \= ([0-9\:]+)'
     synlog  = ''
     impllog = ''
 
